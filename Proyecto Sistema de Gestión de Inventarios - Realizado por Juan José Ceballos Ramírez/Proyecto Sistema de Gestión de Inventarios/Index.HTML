@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- #cSpell:disable -->
+    <link rel="icon" href="en-linea.png">
+    <title>Inventario de Tienda - SúperStock</title>
+    <link rel="stylesheet" href="Css/Style.css">
+    <link rel="stylesheet" href="Js/Script.Js">
+</head>
+<body>
+    <!-- <video muted autoplay loop src="Img/6915809_Motion Graphics_Motion Graphic_3840x2160.mp4" type="video/mp4"></video>
+    <div class="capa"></div> -->
+    <div class="fondo">
+        <div class="cartoon"><img src="Img/pngtree-3d-cartoon-teacher-pointing-finger-png-image_12862613.png" alt=""></div>
+        <div class="TituloWeb">
+            <h1>Gestión de Inventario</h1>
+        </div>
+
+        <!-- Formulario para agregar un producto -->
+        <div class="productoadd">
+            <form id="formAgregar">
+                <h2>Agregar Producto</h2>
+                <label for="nombreProducto">Nombre del producto:</label><br>
+                <input type="text" id="nombreProducto" name="nombreProducto" required placeholder="Escribe aquí ..."><br>
+                <label for="cantidadProducto">Cantidad:</label><br>
+                <input type="number" id="cantidadProducto" name="cantidadProducto" required placeholder="Escribe aquí ..."><br>
+                <button type="submit">Agregar Producto</button>
+            </form>
+        </div>
+
+        <!-- Formulario para actualizar la cantidad de un producto -->
+        <div class="update">
+            <form id="formActualizar">
+                <h2>Actualizar Cantidad de Producto</h2>
+                <label for="nombreActualizar">Nombre del producto:</label><br>
+                <input type="text" id="nombreActualizar" name="nombreActualizar" required placeholder="Escribe aquí ..."><br>
+                <label for="nuevaCantidad">Nueva cantidad:</label><br>
+                <input type="number" id="nuevaCantidad" name="nuevaCantidad" required placeholder="Escribe aquí ..."><br>
+                <button type="submit">Actualizar Producto</button>
+            </form>
+        </div>
+
+        <!-- Botón para eliminar productos sin stock -->
+        <div class="delete">
+            <form id="formEliminar">
+                <h2>Eliminar Productos sin Stock</h2>
+                <button type="submit">Eliminar Productos sin Stock</button>
+            </form>
+        </div>
+
+        <!-- Sección para mostrar los productos -->
+        <div class="product-list">
+            <h2>Lista de Productos</h2>
+            <table id="tablaProductos">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody id="listaProductos">
+                    <!-- Productos se agregarán dinámicamente aquí -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const productos = [];
+
+// Función para renderizar la lista de productos
+function renderizarProductos() {
+    const listaProductos = document.getElementById('listaProductos');
+    listaProductos.innerHTML = ''; // Limpiar la tabla antes de volver a renderizar
+
+    productos.forEach((producto, index) => {
+        const fila = document.createElement('tr');
+        fila.innerHTML = `
+            <td>${producto.nombre}</td>
+            <td>${producto.cantidad}</td>
+        `;
+        listaProductos.appendChild(fila);
+    });
+}
+
+// Agregar producto
+document.getElementById('formAgregar').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('nombreProducto').value;
+    const cantidad = parseInt(document.getElementById('cantidadProducto').value);
+
+    productos.push({ nombre, cantidad });
+    renderizarProductos();
+
+    // Limpiar campos del formulario
+    document.getElementById('nombreProducto').value = '';
+    document.getElementById('cantidadProducto').value = '';
+});
+
+// Actualizar producto
+document.getElementById('formActualizar').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nombreActualizar = document.getElementById('nombreActualizar').value;
+    const nuevaCantidad = parseInt(document.getElementById('nuevaCantidad').value);
+
+    const producto = productos.find(p => p.nombre === nombreActualizar);
+    if (producto) {
+        producto.cantidad = nuevaCantidad;
+        renderizarProductos();
+    } else {
+        alert('Producto no encontrado');
+    }
+
+    // Limpiar campos del formulario
+    document.getElementById('nombreActualizar').value = '';
+    document.getElementById('nuevaCantidad').value = '';
+});
+
+// Eliminar productos sin stock
+document.getElementById('formEliminar').addEventListener('submit', function(e) {
+    e.preventDefault();
+    for (let i = productos.length - 1; i >= 0; i--) {
+        if (productos[i].cantidad === 0) {
+            productos.splice(i, 1); // Eliminar productos con cantidad 0
+        }
+    }
+    renderizarProductos();
+});
+    </script>
+    <script src="code.js" defer></script>
+</body>
+</html>
